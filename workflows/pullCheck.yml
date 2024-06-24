@@ -1,0 +1,96 @@
+# This is a file that resolves the github integration part of the testing framework.
+# a few things are commented out to make testing easier, as github framework (mostly) require manual testing so time-saving is definitely very useful.
+# steps that are commented out will most probably NOT be so in the final version of the product (and the presentation).
+# The workflow resolves all requirements related to the PRsubsystem.
+# All work done on the workflows and proof of them functioning properly can be seen on the repository maselko13/ewatercycletests.
+name: Model Verification
+run-name: pullCheck
+on:
+   pull_request:
+       types: [ reopened, opened ]
+env:
+  PASS: tests passed!
+jobs:
+  Test-request-file:
+    # ensures only plugin addition pull requests are checked
+    if: startsWith(github.event.pull_request.title, 'add model:') &&  github.event.pull_request.base.ref == 'main' 
+    runs-on: self-hosted
+    steps:
+        - name: checkout submission branch
+          uses: actions/checkout@v4
+          with: 
+             ref: ${{github.head_ref}}
+        - name: Get changed files
+          id: changed-files
+          uses: tj-actions/changed-files@v44
+         # checks whether the only file changed in the PR is the models.txt file, as per submission requirements
+       # - name: check changed files
+       #   env:
+      #     ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+     #     run: |
+    #       [ "${{env.ALL_CHANGED_FILES}}" == "models.txt" ] || exit 1
+        - name: create-directory-for-model-repo
+          run: mkdir second
+        - name: model-list-tests
+          run: conda run -n ewatercycle --no-capture-output python models_modification_tests.py
+          # the submission file test outputs the path to the plugin file repository, which is stored as a a variable in order to import it in the next step.
+        - name: model-list-tests-as-output
+          run: |
+             {
+             echo 'REPO<<EOF'
+             conda run -n ewatercycle --no-capture-output python models_modification_tests.py
+             echo EOF
+             } >> "$GITHUB_ENV"
+
+      #  - name: clone-repo
+     #     uses: actions/checkout@v4
+    #      with:
+   #           repository: ${{env.REPO}}
+  #            ref: main
+ #             path: second
+  #      - name: move-model-file
+ #         run: mv -f second/Mocks.py .
+         # imports the model
+        - name: install-plugin
+          run: pip install git+${{env.REPO}}
+   #     - name: move-submission-file
+  #        run: mv -f second/submission.yml .
+        - name: submission-file-tests
+          run: conda run -n ewatercycle --no-capture-output python plugin_submission_tests.py
+  Test-model:
+    needs: Test-request-file
+    # ensures only plugin addition pull requests are checked
+    if: startsWith(github.event.pull_request.title, 'add model:') &&  github.event.pull_request.base.ref == 'main' 
+    runs-on: self-hosted
+    permissions:
+      contents: write
+    steps:  
+    #    - name: clone-repo
+    #      uses: actions/checkout@v4
+   #       with:
+  #            ref: main
+  #            repository: ${{steps.submission-file-tests.outputs.repository}}
+ #             path: second
+        - name: run-model-tests-as-output
+          run: |
+             {
+             echo 'RESULT<<EOF'
+             conda run -n ewatercycle --no-capture-output python main.py
+             echo EOF
+             } >> "$GITHUB_ENV"
+          # uploads test results as an artifact
+        - name: upload-test-results
+          uses: actions/upload-artifact@v4
+          with:
+               name: test result
+               path: output
+      # OR imitates an if here as linux checks the first command firsta
+        - name: fail-on-tests-failing
+          if: ${{ env.RESULT != env.PASS }}
+          uses: actions/github-script@v7
+          with:
+           script: |
+                core.setFailed('Tests Failed!')
+              
+              
+

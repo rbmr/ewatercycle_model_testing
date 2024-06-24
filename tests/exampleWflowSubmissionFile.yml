@@ -1,0 +1,17 @@
+# this is a simple submission file for plugin owners
+# One should include a link to the repository as the repository variable: in the format user/name.
+# The repository should be public so that our framework can clone it and test the plugin.
+repository: maselko13/ewatercycletests
+model_name: 'Wflow'
+model_type: 'Distributed'
+output_variable_name: 'RiverRunoff'
+parameter_set_name: 'wflow_rhine_sbm_nc'
+setup_variables: null
+custom_forcing_name: 'WflowForcing'
+custom_forcing_variables:
+        - directory: '.'
+        - netcdfinput: "inmaps.nc"
+        - Precipitation: "/P"
+        - EvapoTranspiration: "/PET"
+        - Temperature: "/TEMP"
+

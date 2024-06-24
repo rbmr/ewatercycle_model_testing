@@ -1,0 +1,8 @@
+model_name: 'LeakyBucket'
+model_type: 'Lumped'
+output_variable_name: 'discharge'
+parameter_set_name: null
+setup_variables:
+        - leakiness: 1
+custom_forcing_name: null
+custom_forcing_variables: null

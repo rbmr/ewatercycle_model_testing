@@ -1,0 +1,9 @@
+__pycache__
+.idea
+testReport.yaml
+output.md
+
+*.egg-info
+*.eggs
+dist
+build

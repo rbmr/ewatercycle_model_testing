@@ -1,0 +1,21 @@
+# this is a simple submission file for plugin owners.
+# Not all variables in this submission must be in a real plugin verification submission.
+# variables marked with (OPTIONAL) can be set to Null or "None" if the model doesn't require them in order to be ran.
+# This example submission file follows the values that would be filled in for the eWaterCycle 'LeakyBucket' model.
+# The model can be found here: https://github.com/eWaterCycle/leakybucket-bmi
+#the name of the model
+model_name: 'LeakyBucket'
+# the model typing, must be either 'Lumped' or 'Distributed'.
+model_type: 'Lumped'
+# the name of the variable responsible for output, needed for output testing.
+output_variable_name: 'discharge'
+# (OPTIONAL) the name of the parameter set required for the model.
+parameter_set_name: null
+# (OPTIONAL) the names and values of all setup variables of the model.
+setup_variables:
+        - leakiness: 1
+# (OPTIONAL) the name of the custom forcing required for the model.
+custom_forcing_name: null
+# (OPTIONAL) the names and values of all custom forcing variables required to generate the forcing for the model.
+custom_forcing_variables: null
+
