@@ -1,5 +1,5 @@
 class VarDoesntExistException(Exception):
-    print("the variable you're trying to get doesn't exist!")
+    pass
 
 class NotFoundException(Exception):
         def __init__(self, message):

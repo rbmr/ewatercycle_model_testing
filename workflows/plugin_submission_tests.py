@@ -62,7 +62,7 @@ def contains_parameter_set_name_test(data):
         data: the submission.yml file.
     """
     try:
-        print(data.get("parameter_set_name"))
+        data.get("parameter_set_name")
     except Exception as exception:
         raise Exceptions.NotFoundException("No parameter set was provided"
      "(add parameter_set_name and set it to None if not applicable to the model)")\
