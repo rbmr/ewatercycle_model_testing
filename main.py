@@ -13,7 +13,6 @@ from ewatercycle_model_testing.test_report_maker import GenerateReport
 from ewatercycle_model_testing.parse_submission import ParseSubmission
 from ewatercycle_model_testing import constants as c
 #pylint:disable=unused-import
-# if these imports aren't there the test suite has no test banks
 from ewatercycle_model_testing import spec_tests, metric_tests, bmi_spec_tests, scenario_tests, error_tests
 
 
